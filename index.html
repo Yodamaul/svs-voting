@@ -283,7 +283,8 @@
                     for(var o in obj.roles){
                         obj.roles[o] = app.jobs[obj.roles[o]].name;
                     }
-                  db.collection("applications").add(obj).then(function(){alert("Application Successful!");});
+                  db.collection("applications").add(obj).then(function(){M.toast({html: 'Application Submitted Successfully!', classes: 'rounded'});
+               });
     
                 }
             },
