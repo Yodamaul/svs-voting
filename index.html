@@ -147,12 +147,12 @@
             <form class="col s12">
                 <div class="row">
                     <div class="input-field col s6">
-                        <input v-model="application.name" placeholder="Placeholder" id="first_name" type="text"
+                        <input v-model="application.name" placeholder="E.G. John Doe" id="first_name" type="text"
                             class="validate">
                         <label for="first_name">Name</label>
                     </div>
                     <div class="input-field col s6">
-                        <input v-model="application.discord_tag" id="last_name" type="text" class="validate">
+                        <input placeholder="username#9999" v-model="application.discord_tag" id="last_name" type="text" class="validate">
                         <label for="last_name">Discord Tag (username#9999)</label>
                     </div>
                 </div>
@@ -283,8 +283,8 @@
                     for(var o in obj.roles){
                         obj.roles[o] = app.jobs[obj.roles[o]].name;
                     }
-                  db.collection("applications").add(obj);
-
+                  db.collection("applications").add(obj).then(function(){alert("Application Successful!"});
+    
                 }
             },
             data: {
