@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVS Interest Form</title>
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"
+        integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+    <style>
+        .btn {
+            width: 100%;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container" id="app">
+        <div class="row">
+            <h1>SVS Team Application</h1>
+        </div>
+        <div class="row">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+                ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
+                fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+                deserunt mollit anim id est laborum.</p>
+            <ul class="collapsible">
+                <li>
+                    <div class="collapsible-header">Event Coordination</div>
+                    <div class="collapsible-body">
+                        <ul class="collection">
+                            <li class="collection-item"> Leaders only: sensitive responsibilities- data/account access
+                                (passwords- need a
+                                manager? etc), finances, final green-lights/sign-offs/decisions</li>
+
+                            <li class="collection-item">Meta-organisation: maintaining/facilitating communication and
+                                collaboration between
+                                teams to set out and accomplish overall event goals</li>
+                            <li class="collection-item">
+                                Coordinate fundamentals/mechanics of events: rules, timelines, requirements etc</li>
+                            <li class="collection-item"> (Code of conduct is a cross-team and whole-community project)
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li>
+                    <div class="collapsible-header">Creative and Design</div>
+                    <div class="collapsible-body">
+                        <ul class="collection">
+                            <li class="collection-item"> Handles development of Art, Media, and Branding Assets-
+                                including but not limited to visual art, design concepts, video edits</li>
+
+                            <li class="collection-item">Create any commissioned assets required by the Livestream +
+                                Social Media teams.</li>
+                            <li class="collection-item">
+                                Works closely with the Stream Tech and the Social Media Team.</li>
+                        </ul>
+                    </div>
+                </li>
+                <li>
+                    <div class="collapsible-header">Social Media</div>
+                    <div class="collapsible-body">
+                        <ul class="collection">
+                            <li class="collection-item">Manages social media accounts including but not limited to:
+                                Twitch, Youtube, Instagram, and Twitter.</li>
+                            <li class="collection-item">
+                                Develop promotional / informational campaigns for events
+                            </li>
+                            <li class="collection-item">
+                                Commissions/works with creative team to develop content
+
+                            </li>
+                            <li class="collection-item">
+                                Monitors and responds to public presence? outside of Discord.
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li>
+                    <div class="collapsible-header">Participant Outreach</div>
+                    <div class="collapsible-body">
+                        <ul class="collection">
+                            <li class="collection-item">Scouts, records and contacts new communities that might be
+                                interested in participating./li>
+                            <li class="collection-item">Screens applying/scouted communities. Verifies that they will be
+                                a good fit for competition- attitude, conduct, engagement, organisation, etc.</li>
+                            <li class="collection-item">Responsible for maintaining relations and checking up with
+                                communities’ progress throughout signups and the competition.
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li>
+                    <div class="collapsible-header">Fundraising and Sponsorship Coordination</div>
+                    <div class="collapsible-body">
+                        <ul class="collection">
+                            <li class="collection-item">Reaches out and sustains relations to external organisations
+                                such as charities and sponsors</li>
+                            <li class="collection-item">Responsible for communicating status/requirements/opportunities
+                                between wider team and external entities</li>
+                            <li class="collection-item">Being recognisable point of contact (personal info)
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li>
+                    <div class="collapsible-header">Live Stream and Tech</div>
+                    <div class="collapsible-body">
+                        <ul class="collection">
+                            <li class="collection-item"> Maintains and develops the SVS Website, discord bot and
+                                livestream - via
+                                OBS and Touchdesigner.</li>
+                            <li class="collection-item">Commissions any necessary assets from the CaD team.</li>
+                            <li class="collection-item">File / account / backup management</li>
+                        </ul>
+                    </div>
+                </li>
+                <li>
+                    <div class="collapsible-header">Moderation</div>
+                    <div class="collapsible-body">
+                        <ul class="collection">
+                            <li class="collection-item"> Moderate the discord server and Twitch chat upholding rules/
+                                CoC</li>
+
+                            <li class="collection-item">Handles disputes between community members</li>
+                            <li class="collection-item">Prevents and cleans spam.</li>
+                        </ul>
+                    </div>
+                </li>
+
+            </ul>
+
+
+        </div>
+        <hr>
+        <div class="row">
+            <form class="col s12">
+                <div class="row">
+                    <div class="input-field col s6">
+                        <input v-model="application.name" placeholder="Placeholder" id="first_name" type="text"
+                            class="validate">
+                        <label for="first_name">Name</label>
+                    </div>
+                    <div class="input-field col s6">
+                        <input v-model="application.discord_tag" id="last_name" type="text" class="validate">
+                        <label for="last_name">Discord Tag (username#9999)</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <select v-model="application.time_zone">
+                            <option value="" disabled selected>Choose your Timezone</option>
+                            <option v-for="t in timezone" v-bind:value="t.name">{{t.name}} ({{t.time}})</option>
+                        </select>
+                        <label>Time Zone</label>
+
+                        <span class="helper-text">Relative to GMT</span>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <h5>Which of the following teams are you interested in?</h5>
+                    <p v-for="(j,k) in jobs">
+                        <label>
+                            <input v-bind:value="k" v-model="application.roles"
+                                v-bind:disabled="application.roles.length > 2 && application.roles.indexOf(k) === -1"
+                                v-for:id="j.name" type="checkbox" />
+                            <span>{{j.name}}</span>
+                        </label>
+                    </p>
+
+                    <h6>Which role are you most interested in?</h6>
+                    <p v-for="(aa,ind) in application.roles">
+                        <label>
+                            <input v-bind:value="jobs[aa].name" v-model="application.fav" name="top" type="radio" />
+                            <span>{{jobs[aa].name}}</span>
+                        </label>
+                    </p>
+                </div>
+
+                <div class="row">
+                    <h5>Skills/Experience </h5>
+                    <p>These may be shared with other teammates as a skills reference only.</p>
+                    <ul class="collection">
+                        <li v-for="(aa,ind) in application.roles" class="collection-item">
+                            <textarea v-model="application.role_experience[ind]" v-bind:id="3+aa"
+                                class="materialize-textarea"></textarea>
+                            <label v-bind:for="3+aa">What skills do you have relating to {{jobs[aa].name}}?</label>
+                        </li>
+                    </ul>
+                    <div class="input-field col s12">
+                        <textarea v-model="application.desc" id="textarea1"
+                            class="materialize-textarea"></textarea>
+                        <label for="textarea1">List any experience and Skills not listed above</label>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col s12">
+
+                        <a v-on:click="submitapp"
+                            class="waves-effect btn-large  deep-purple darken-2 waves-light btn">Submit Application</a>
+                    </div>
+                </div>
+
+
+
+
+
+            </form>
+        </div>
+
+
+
+
+
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script type="module">
+
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCDaeEQye-cEJ7UIa-9uIJuDaAvbrZjCmQ",
+            authDomain: "svs4-327921.firebaseapp.com",
+            projectId: "svs4-327921",
+            storageBucket: "svs4-327921.appspot.com",
+            messagingSenderId: "703070573943",
+            appId: "1:703070573943:web:96dbd2b465ea990d3ebd72"
+        };
+
+        // Initialize Firebase
+        const appf = firebase.initializeApp(firebaseConfig);
+
+        var db = firebase.firestore();
+
+
+        function ConvertToCSV(objArray) {
+            var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
+            var str = '';
+
+            for (var i = 0; i < array.length; i++) {
+                var line = '';
+                for (var index in array[i]) {
+                    if (line != '') line += ','
+
+                    line += array[i][index];
+                }
+
+                str += line + '\r\n';
+            }
+
+            return str;
+        }
+
+        $(document).ready(function () {
+            $('select').formSelect();
+
+            $('.collapsible').collapsible();
+        });
+
+        var app = new Vue({
+            el: '#app',
+            methods: {
+                submitapp: function () {
+                    var obj = JSON.parse(JSON.stringify(app.application));
+                    for(var o in obj.roles){
+                        obj.roles[o] = app.jobs[obj.roles[o]].name;
+                    }
+                  db.collection("applications").add(obj);
+
+                }
+            },
+            data: {
+                jobs: {
+                    ec: { name: "Event Coordination", desc: "The glue that holds the rest of the teams together" },
+                    cad: { name: "Creative and Design", desc: "Content creators" },
+                    sm: { name: "Social Media", desc: "Getting the word out and giving SvS a public presence" },
+                    po: { name: "Participant Outreach", desc: "Checking and communicating with participants" },
+                    fsc: { name: "Fundraising and Sponsorship Coordination", desc: "External relations" },
+                    lst: { name: "Live Stream and Tech", desc: "Website, stream and general technical needs" },
+                    mod: { name: "Moderation", desc: "Keeping things clean on the server and the stream" },
+
+
+                }
+                ,
+
+                timezone: [
+                    {
+                        "abbrev": "GMT",
+                        "name": "Greenwich Mean Time",
+                        "time": "GMT"
+                    },
+                    {
+                        "abbrev": "UTC",
+                        "name": "Universal Coordinated Time",
+                        "time": "GMT"
+                    },
+                    {
+                        "abbrev": "ECT",
+                        "name": "European Central Time",
+                        "time": "GMT+1:00"
+                    },
+                    {
+                        "abbrev": "EET",
+                        "name": "Eastern European Time",
+                        "time": "GMT+2:00"
+                    },
+                    {
+                        "abbrev": "ART",
+                        "name": "(Arabic) Egypt Standard Time",
+                        "time": "GMT+2:00"
+                    },
+                    {
+                        "abbrev": "EAT",
+                        "name": "Eastern African Time",
+                        "time": "GMT+3:00"
+                    },
+                    {
+                        "abbrev": "MET",
+                        "name": "Middle East Time",
+                        "time": "GMT+3:30"
+                    },
+                    {
+                        "abbrev": "NET",
+                        "name": "Near East Time",
+                        "time": "GMT+4:00"
+                    },
+                    {
+                        "abbrev": "PLT",
+                        "name": "Pakistan Lahore Time",
+                        "time": "GMT+5:00"
+                    },
+                    {
+                        "abbrev": "IST",
+                        "name": "India Standard Time",
+                        "time": "GMT+5:30"
+                    },
+                    {
+                        "abbrev": "BST",
+                        "name": "Bangladesh Standard Time",
+                        "time": "GMT+6:00"
+                    },
+                    {
+                        "abbrev": "VST",
+                        "name": "Vietnam Standard Time",
+                        "time": "GMT+7:00"
+                    },
+                    {
+                        "abbrev": "CTT",
+                        "name": "China Taiwan Time",
+                        "time": "GMT+8:00"
+                    },
+                    {
+                        "abbrev": "JST",
+                        "name": "Japan Standard Time",
+                        "time": "GMT+9:00"
+                    },
+                    {
+                        "abbrev": "ACT",
+                        "name": "Australia Central Time",
+                        "time": "GMT+9:30"
+                    },
+                    {
+                        "abbrev": "AET",
+                        "name": "Australia Eastern Time",
+                        "time": "GMT+10:00"
+                    },
+                    {
+                        "abbrev": "SST",
+                        "name": "Solomon Standard Time",
+                        "time": "GMT+11:00"
+                    },
+                    {
+                        "abbrev": "NST",
+                        "name": "New Zealand Standard Time",
+                        "time": "GMT+12:00"
+                    },
+                    {
+                        "abbrev": "MIT",
+                        "name": "Midway Islands Time",
+                        "time": "GMT-11:00"
+                    },
+                    {
+                        "abbrev": "HST",
+                        "name": "Hawaii Standard Time",
+                        "time": "GMT-10:00"
+                    },
+                    {
+                        "abbrev": "AST",
+                        "name": "Alaska Standard Time",
+                        "time": "GMT-9:00"
+                    },
+                    {
+                        "abbrev": "PST",
+                        "name": "Pacific Standard Time",
+                        "time": "GMT-8:00"
+                    },
+                    {
+                        "abbrev": "PNT",
+                        "name": "Phoenix Standard Time",
+                        "time": "GMT-7:00"
+                    },
+                    {
+                        "abbrev": "MST",
+                        "name": "Mountain Standard Time",
+                        "time": "GMT-7:00"
+                    },
+                    {
+                        "abbrev": "CST",
+                        "name": "Central Standard Time",
+                        "time": "GMT-6:00"
+                    },
+                    {
+                        "abbrev": "EST",
+                        "name": "Eastern Standard Time",
+                        "time": "GMT-5:00"
+                    },
+                    {
+                        "abbrev": "IET",
+                        "name": "Indiana Eastern Standard Time",
+                        "time": "GMT-5:00"
+                    },
+                    {
+                        "abbrev": "PRT",
+                        "name": "Puerto Rico and US Virgin Islands Time",
+                        "time": "GMT-4:00"
+                    },
+                    {
+                        "abbrev": "CNT",
+                        "name": "Canada Newfoundland Time",
+                        "time": "GMT-3:30"
+                    },
+                    {
+                        "abbrev": "AGT",
+                        "name": "Argentina Standard Time",
+                        "time": "GMT-3:00"
+                    },
+                    {
+                        "abbrev": "BET",
+                        "name": "Brazil Eastern Time",
+                        "time": "GMT-3:00"
+                    },
+                    {
+                        "abbrev": "CAT",
+                        "name": "Central African Time",
+                        "time": "GMT-1:00"
+                    }
+                ],
+
+
+
+                application: {
+                    name: "",
+                    discord_tag: "",
+                    time_zone: "",
+                    desc: "",
+                    fav:"",
+                    roles: [],
+                    role_experience: []
+                }
+            }
+        }
+        );
+
+
+    </script>
+
+
+
+</body>
+
+</html>

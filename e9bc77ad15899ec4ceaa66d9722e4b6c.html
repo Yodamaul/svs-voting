@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVS Responses</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"
+        integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+</head>
+
+<body>
+    <div class="container" id="app">
+        <table class="table-sort table-arrows">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Discord Tag</th>
+                    <th>Time Zone</th>
+                    <th>Item Price</th>
+                    <th>Item Price</th>
+                    <th>Extra Info</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr v-for="ap in apps">
+                    <td>{{ap.name}}</td>
+                    <td>{{ap.discord_tag}}</td>
+                    <td>{{ap.time_zone}}</td>
+                    <td>
+                        <ul class="collection">
+                            <li class="collection-item" v-bind:class="{purple : r == ap.fav}" v-for="r in ap.roles">{{r}} </li>
+                        </ul>
+                    </td>  <td>
+                        <ul class="collection">
+                            <li class="collection-item" v-for="r in ap.role_experience">{{r}} </li>
+                        </ul>
+                    </td>
+                    <td>
+                        <p>{{ap.desc}}</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+   <script src="table-sort.js"></script>
+   <script type="module">
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCDaeEQye-cEJ7UIa-9uIJuDaAvbrZjCmQ",
+            authDomain: "svs4-327921.firebaseapp.com",
+            projectId: "svs4-327921",
+            storageBucket: "svs4-327921.appspot.com",
+            messagingSenderId: "703070573943",
+            appId: "1:703070573943:web:96dbd2b465ea990d3ebd72"
+        };
+
+        // Initialize Firebase
+        const appf = firebase.initializeApp(firebaseConfig);
+
+        var db = firebase.firestore();
+
+        var app = new Vue({
+            el: '#app',
+            data: {
+                apps: []
+
+            }
+        });
+
+
+        var docRef = db.collection("applications");
+        docRef.get().then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                // doc.data() is never undefined for query doc snapshots
+                var arr = app.apps;
+                arr.push(doc.data());
+                app.apps = arr;
+            });
+
+        });
+    </script>
+</body>
+
+</html>
