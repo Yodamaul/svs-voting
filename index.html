@@ -19,11 +19,12 @@
             width: 100%;
         }
 
-        .collapsible-header label span{
-            color:black
+        .collapsible-header label span {
+            color: black
         }
-        .collapsible-header label span span.summary{
-            color:gray;
+
+        span.summary {
+            color: gray;
             font-style: italic;
         }
     </style>
@@ -88,10 +89,9 @@
                                         id="ec" type="checkbox" />
                                     <span>
 
-                                        Event Coordination 
-                                        <span class="summary">{{jobs["ec"].desc}}</span></span>
+                                    </span>
+                                </label> Event Coordination&nbsp<span class="summary">{{jobs["ec"].desc}}</span>
 
-                                </label>
 
                             </div>
                             <div class="collapsible-body">
@@ -116,15 +116,15 @@
                         </li>
                         <li>
                             <div class="collapsible-header"> <label>
-                                <input value="cad" v-model="application.roles"
-                                    v-bind:disabled="application.roles.length > 2 && application.roles.indexOf('cad') === -1"
-                                    id="cad" type="checkbox" />
-                                <span>
+                                    <input value="cad" v-model="application.roles"
+                                        v-bind:disabled="application.roles.length > 2 && application.roles.indexOf('cad') === -1"
+                                        id="cad" type="checkbox" />
+                                    <span>
 
-                                    Creative and Design  <span class="summary">{{jobs["cad"].desc}}</span></span>
-                                </span>
-
-                            </label></div>
+                                    </span>
+                                </label>
+                                Creative and Design&nbsp<span class="summary">{{jobs["cad"].desc}}</span>
+                            </div>
                             <div class="collapsible-body">
                                 <ul class="collection">
                                     <li class="collection-item"> Handles development of Art, Media, and Branding Assets-
@@ -140,15 +140,15 @@
                         </li>
                         <li>
                             <div class="collapsible-header"><label>
-                                <input value="sm" v-model="application.roles"
-                                    v-bind:disabled="application.roles.length > 2 && application.roles.indexOf('sm') === -1"
-                                    id="sm" type="checkbox" />
-                                <span>
+                                    <input value="sm" v-model="application.roles"
+                                        v-bind:disabled="application.roles.length > 2 && application.roles.indexOf('sm') === -1"
+                                        id="sm" type="checkbox" />
+                                    <span>
 
-                                    Social Media  <span class="summary">{{jobs["sm"].desc}}</span></span>
-                                </span>
-
-                            </label></div>
+                                    </span>
+                                </label>
+                                Social Media&nbsp<span class="summary">{{jobs["sm"].desc}}</span>
+                            </div>
                             <div class="collapsible-body">
                                 <ul class="collection">
                                     <li class="collection-item">Manages social media accounts including but not limited
@@ -169,15 +169,15 @@
                         </li>
                         <li>
                             <div class="collapsible-header"><label>
-                                <input value="po" v-model="application.roles"
-                                    v-bind:disabled="application.roles.length > 2 && application.roles.indexOf('po') === -1"
-                                    id="po" type="checkbox" />
-                                <span>
+                                    <input value="po" v-model="application.roles"
+                                        v-bind:disabled="application.roles.length > 2 && application.roles.indexOf('po') === -1"
+                                        id="po" type="checkbox" />
+                                    <span>
 
-                                    Participant Outreach   <span class="summary">{{jobs["po"].desc}}</span></span>
-                                </span>
+                                    </span></label>
+                                Participant Outreach&nbsp<span class="summary">{{jobs["po"].desc}}</span>
 
-                            </label></div>
+                            </div>
                             <div class="collapsible-body">
                                 <ul class="collection">
                                     <li class="collection-item">Scouts, records and contacts new communities that might
@@ -196,15 +196,16 @@
                         </li>
                         <li>
                             <div class="collapsible-header"><label>
-                                <input value="fsc" v-model="application.roles"
-                                    v-bind:disabled="application.roles.length > 2 && application.roles.indexOf('fsc') === -1"
-                                    id="fsc" type="checkbox" />
-                                <span>
+                                    <input value="fsc" v-model="application.roles"
+                                        v-bind:disabled="application.roles.length > 2 && application.roles.indexOf('fsc') === -1"
+                                        id="fsc" type="checkbox" />
+                                    <span>
 
-                                    Fundraising and Sponsorship Coordination   <span class="summary">{{jobs["fsc"].desc}}</span></span>
-                                </span>
-
-                            </label></div>
+                                    </span>
+                                </label>
+                                Fundraising and Sponsorship Coordination&nbsp<span
+                                    class="summary">{{jobs["fsc"].desc}}</span>
+                            </div>
                             <div class="collapsible-body">
                                 <ul class="collection">
                                     <li class="collection-item">Reaches out and sustains relations to external
@@ -220,15 +221,15 @@
                         </li>
                         <li>
                             <div class="collapsible-header"><label>
-                                <input value="lst" v-model="application.roles"
-                                    v-bind:disabled="application.roles.length > 2 && application.roles.indexOf('lst') === -1"
-                                    id="lst" type="checkbox" />
-                                <span>
+                                    <input value="lst" v-model="application.roles"
+                                        v-bind:disabled="application.roles.length > 2 && application.roles.indexOf('lst') === -1"
+                                        id="lst" type="checkbox" />
+                                    <span>
 
-                                    Live Stream and Tech   <span class="summary">{{jobs["lst"].desc}}</span></span>
-                                </span>
+                                    </span> </label>
 
-                            </label></div>
+                                Live Stream and Tech&nbsp<span class="summary">{{jobs["lst"].desc}}</span>
+                            </div>
                             <div class="collapsible-body">
                                 <ul class="collection">
                                     <li class="collection-item"> Maintains and develops the SVS Website, discord bot and
@@ -241,15 +242,15 @@
                         </li>
                         <li>
                             <div class="collapsible-header"><label>
-                                <input value="mod" v-model="application.roles"
-                                    v-bind:disabled="application.roles.length > 2 && application.roles.indexOf('mod') === -1"
-                                    id="mod" type="checkbox" />
-                                <span>
+                                    <input value="mod" v-model="application.roles"
+                                        v-bind:disabled="application.roles.length > 2 && application.roles.indexOf('mod') === -1"
+                                        id="mod" type="checkbox" />
+                                    <span>
 
-                                    Moderation   <span class="summary">{{jobs["mod"].desc}}</span></span>
-                                </span>
-
-                            </label></div>
+                                    </span>
+                                </label>
+                                Moderation&nbsp<span class="summary">{{jobs["mod"].desc}}</span>
+                            </div>
                             <div class="collapsible-body">
                                 <ul class="collection">
                                     <li class="collection-item"> Moderate the discord server and Twitch chat upholding
