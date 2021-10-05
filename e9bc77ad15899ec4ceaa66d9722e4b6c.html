@@ -28,17 +28,20 @@ bottom:5vw;
         <table class="table-sort table-arrows">
             <thead>
                 <tr>
+                    <th>Timestamp</th>
                     <th>Name</th>
                     <th>Discord Tag</th>
                     <th>Time Zone</th>
                     <th>Job</th>
                     <th>Experience</th>
                     <th>Extra Info</th>
+                    <th class="red-text">Delete App</th>
                 </tr>
             </thead>
 
             <tbody>
                 <tr v-for="ap in apps">
+                    <td>{{ap.timestamp}}</td>
                     <td>{{ap.name}}</td>
                     <td>{{ap.discord_tag}}</td>
                     <td>{{ap.time_zone}}</td>
@@ -53,6 +56,8 @@ bottom:5vw;
                     </td>
                     <td>
                         <p>{{ap.desc}}</p>
+                    </td> <td>
+                        <button v-on:click="dele(ap.key)" class="btn white-text red">Delete</button>
                     </td>
                 </tr>
             </tbody>
@@ -91,24 +96,40 @@ bottom:5vw;
         docRef.get().then((querySnapshot) => {
             var arr = [];
             querySnapshot.forEach((doc) => {
-                // doc.data() is never undefined for query doc snapshots
-                
-                arr.push(doc.data());
+                var obj = doc.data();
+                obj.key = doc.id;
+                arr.push(obj);  
             });
+            
                 app.apps = arr;
 
         });
 
-            }}
+            },
+            dele : function(key){
+                console.log("TEST");
+                var conf = confirm("Are You sure you want to delete this?")
+                if(conf){
+                db.collection("applications").doc(key).delete()
+                app.refresh();}
+            }
+        
+        
+        
+        
+        }
         });
 
 
         var docRef = db.collection("applications");
         docRef.get().then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
+                console.log(doc.id);
                 // doc.data() is never undefined for query doc snapshots
                 var arr = app.apps;
-                arr.push(doc.data());
+                var obj = doc.data();
+                obj.key = doc.id;
+                arr.push(obj);
                 app.apps = arr;
             });
 
