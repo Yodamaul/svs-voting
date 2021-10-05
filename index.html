@@ -212,7 +212,9 @@
 
                         <a v-on:click="submitapp"
                             class="waves-effect btn-large  deep-purple darken-2 waves-light btn">Submit Application</a>
-                    </div>
+                   <blockquote>
+                             *If you'd like to reapply just re-submit the form! </blockquote>
+                       </div>
                 </div>
 
 
@@ -283,6 +285,7 @@
                     for(var o in obj.roles){
                         obj.roles[o] = app.jobs[obj.roles[o]].name;
                     }
+                     obj.timestamp = + new Date();
                   db.collection("applications").add(obj).then(function(){M.toast({html: 'Application Submitted Successfully!', classes: 'rounded'});
                });
     
@@ -474,7 +477,8 @@
                     desc: "",
                     fav:"",
                     roles: [],
-                    role_experience: []
+                    role_experience: [],
+                    timstamp:""
                 }
             }
         }
