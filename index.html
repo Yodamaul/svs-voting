@@ -18,6 +18,14 @@
         .btn {
             width: 100%;
         }
+
+        .collapsible-header label span{
+            color:black
+        }
+        .collapsible-header label span span.summary{
+            color:gray;
+            font-style: italic;
+        }
     </style>
 
 </head>
@@ -80,9 +88,11 @@
                                         id="ec" type="checkbox" />
                                     <span>
 
-                                        Event Coordination</span>
+                                        Event Coordination 
+                                        <span class="summary">{{jobs["ec"].desc}}</span></span>
 
                                 </label>
+
                             </div>
                             <div class="collapsible-body">
                                 <ul class="collection">
@@ -111,7 +121,8 @@
                                     id="cad" type="checkbox" />
                                 <span>
 
-                                    Creative and Design</span>
+                                    Creative and Design  <span class="summary">{{jobs["cad"].desc}}</span></span>
+                                </span>
 
                             </label></div>
                             <div class="collapsible-body">
@@ -134,7 +145,8 @@
                                     id="sm" type="checkbox" />
                                 <span>
 
-                                    Social Media</span>
+                                    Social Media  <span class="summary">{{jobs["sm"].desc}}</span></span>
+                                </span>
 
                             </label></div>
                             <div class="collapsible-body">
@@ -162,7 +174,8 @@
                                     id="po" type="checkbox" />
                                 <span>
 
-                                    Participant Outreach</span>
+                                    Participant Outreach   <span class="summary">{{jobs["po"].desc}}</span></span>
+                                </span>
 
                             </label></div>
                             <div class="collapsible-body">
@@ -188,7 +201,8 @@
                                     id="fsc" type="checkbox" />
                                 <span>
 
-                                    Fundraising and Sponsorship Coordination</span>
+                                    Fundraising and Sponsorship Coordination   <span class="summary">{{jobs["fsc"].desc}}</span></span>
+                                </span>
 
                             </label></div>
                             <div class="collapsible-body">
@@ -211,7 +225,8 @@
                                     id="lst" type="checkbox" />
                                 <span>
 
-                                    Live Stream and Tech</span>
+                                    Live Stream and Tech   <span class="summary">{{jobs["lst"].desc}}</span></span>
+                                </span>
 
                             </label></div>
                             <div class="collapsible-body">
@@ -231,7 +246,8 @@
                                     id="mod" type="checkbox" />
                                 <span>
 
-                                    Moderation</span>
+                                    Moderation   <span class="summary">{{jobs["mod"].desc}}</span></span>
+                                </span>
 
                             </label></div>
                             <div class="collapsible-body">
