@@ -323,9 +323,7 @@
 
 
                     <h6>Which role are you most interested in?</h6>
-                    <p>Please mention any particular skills, experience (i.e. with certain software or strategies),
-                        interests or ideas relevant to contributing as part of this team you'd like to share.</p>
-                    <p v-for="(aa,ind) in application.roles">
+                     <p v-for="(aa,ind) in application.roles">
                         <label>
                             <input v-bind:value="jobs[aa].name" v-model="application.fav" name="top" type="radio" />
                             <span>{{jobs[aa].name}}</span>
@@ -334,6 +332,19 @@
                 </div>
 
 
+                <div class="row">
+                    <h5>Skills/Experience </h5>
+                    <p>Please mention any particular skills, experience (i.e. with certain software or strategies),
+                        interests or ideas relevant to contributing as part of this team you'd like to share.</p>
+                    <ul class="collection">
+                        <li v-for="(aa,ind) in application.roles" class="collection-item">
+                            <textarea v-model="application.role_experience[ind]" v-bind:id="3+aa"
+                                class="materialize-textarea"></textarea>
+                            <label v-bind:for="3+aa">What skills do you have relating to {{jobs[aa].name}}?</label>
+                        </li>
+                    </ul>
+                    
+                </div>
 
 
 
