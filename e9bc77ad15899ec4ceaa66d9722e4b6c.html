@@ -45,7 +45,7 @@ bottom:5vw;
 
             <tbody>
                 <tr v-for="ap in apps">
-                    <td>{{ap.timestamp}}</td>
+                    <td>{{get_date(ap.timestamp)}}</td>
                     <td>{{ap.name}}</td>
                     <td>{{ap.discord_tag}}</td>
                     <td>{{ap.time_zone}}</td>
@@ -124,11 +124,27 @@ bottom:5vw;
                 if(conf){
                 db.collection("applications").doc(key).delete()
                 app.refresh();}
+            },
+            get_date:function(timestamp){
+                if(!timestamp){return ""}
+                let myDate = new Date(timestamp).toLocaleString()
+                return myDate;
+
             }
         
         
         
         
+        },
+
+        computed:{
+
+            get_date:function(timestamp){
+                let myDate = new Date(timestamp).toLocaleString()
+                return myDate;
+
+            }
+
         }
         });
 
