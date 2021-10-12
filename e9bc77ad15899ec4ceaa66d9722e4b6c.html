@@ -51,7 +51,7 @@ width: 90% !important;}
                     <td>{{get_date(ap.timestamp)}}</td>
                     <td>{{ap.name}}</td>
                     <td>{{ap.discord_tag}}</td>
-                    <td>{{ap.time_zone}}</td>
+                    <td>{{get_timezone(ap.time_zone)}} </td>
                     <td>
                         <ul class="collection">
                             <li class="collection-item" v-bind:class="{purple : r == ap.fav, 'lighten-3' : r == ap.fav}" v-for="r in ap.roles">{{r}} </li>
@@ -103,7 +103,171 @@ width: 90% !important;}
         var app = new Vue({
             el: '#app',
             data: {
-                apps: []
+                apps: [],
+                
+                timezone: [
+                    {
+                        "abbrev": "GMT",
+                        "name": "Greenwich Mean Time",
+                        "time": "GMT"
+                    },
+                    {
+                        "abbrev": "UTC",
+                        "name": "Universal Coordinated Time",
+                        "time": "GMT"
+                    },
+                    {
+                        "abbrev": "ECT",
+                        "name": "European Central Time",
+                        "time": "GMT+1:00"
+                    },
+                    {
+                        "abbrev": "EET",
+                        "name": "Eastern European Time",
+                        "time": "GMT+2:00"
+                    },
+                    {
+                        "abbrev": "ART",
+                        "name": "(Arabic) Egypt Standard Time",
+                        "time": "GMT+2:00"
+                    },
+                    {
+                        "abbrev": "EAT",
+                        "name": "Eastern African Time",
+                        "time": "GMT+3:00"
+                    },
+                    {
+                        "abbrev": "MET",
+                        "name": "Middle East Time",
+                        "time": "GMT+3:30"
+                    },
+                    {
+                        "abbrev": "NET",
+                        "name": "Near East Time",
+                        "time": "GMT+4:00"
+                    },
+                    {
+                        "abbrev": "PLT",
+                        "name": "Pakistan Lahore Time",
+                        "time": "GMT+5:00"
+                    },
+                    {
+                        "abbrev": "IST",
+                        "name": "India Standard Time",
+                        "time": "GMT+5:30"
+                    },
+                    {
+                        "abbrev": "BST",
+                        "name": "Bangladesh Standard Time",
+                        "time": "GMT+6:00"
+                    },
+                    {
+                        "abbrev": "VST",
+                        "name": "Vietnam Standard Time",
+                        "time": "GMT+7:00"
+                    },
+                    {
+                        "abbrev": "CTT",
+                        "name": "China Taiwan Time",
+                        "time": "GMT+8:00"
+                    },
+                    {
+                        "abbrev": "JST",
+                        "name": "Japan Standard Time",
+                        "time": "GMT+9:00"
+                    },
+                    {
+                        "abbrev": "ACT",
+                        "name": "Australia Central Time",
+                        "time": "GMT+9:30"
+                    },
+                    {
+                        "abbrev": "AET",
+                        "name": "Australia Eastern Time",
+                        "time": "GMT+10:00"
+                    },
+                    {
+                        "abbrev": "SST",
+                        "name": "Solomon Standard Time",
+                        "time": "GMT+11:00"
+                    },
+                    {
+                        "abbrev": "NST",
+                        "name": "New Zealand Standard Time",
+                        "time": "GMT+12:00"
+                    },
+                    {
+                        "abbrev": "MIT",
+                        "name": "Midway Islands Time",
+                        "time": "GMT-11:00"
+                    },
+                    {
+                        "abbrev": "HST",
+                        "name": "Hawaii Standard Time",
+                        "time": "GMT-10:00"
+                    },
+                    {
+                        "abbrev": "AST",
+                        "name": "Alaska Standard Time",
+                        "time": "GMT-9:00"
+                    },
+                    {
+                        "abbrev": "PST",
+                        "name": "Pacific Standard Time",
+                        "time": "GMT-8:00"
+                    },
+                    {
+                        "abbrev": "PNT",
+                        "name": "Phoenix Standard Time",
+                        "time": "GMT-7:00"
+                    },
+                    {
+                        "abbrev": "MST",
+                        "name": "Mountain Standard Time",
+                        "time": "GMT-7:00"
+                    },
+                    {
+                        "abbrev": "CST",
+                        "name": "Central Standard Time",
+                        "time": "GMT-6:00"
+                    },
+                    {
+                        "abbrev": "EST",
+                        "name": "Eastern Standard Time",
+                        "time": "GMT-5:00"
+                    },
+                    {
+                        "abbrev": "IET",
+                        "name": "Indiana Eastern Standard Time",
+                        "time": "GMT-5:00"
+                    },
+                    {
+                        "abbrev": "PRT",
+                        "name": "Puerto Rico and US Virgin Islands Time",
+                        "time": "GMT-4:00"
+                    },
+                    {
+                        "abbrev": "CNT",
+                        "name": "Canada Newfoundland Time",
+                        "time": "GMT-3:30"
+                    },
+                    {
+                        "abbrev": "AGT",
+                        "name": "Argentina Standard Time",
+                        "time": "GMT-3:00"
+                    },
+                    {
+                        "abbrev": "BET",
+                        "name": "Brazil Eastern Time",
+                        "time": "GMT-3:00"
+                    },
+                    {
+                        "abbrev": "CAT",
+                        "name": "Central African Time",
+                        "time": "GMT-1:00"
+                    }
+                ],
+
 
             },
             methods:{refresh: function(){
@@ -133,6 +297,12 @@ width: 90% !important;}
                 let myDate = new Date(timestamp).toLocaleString()
                 return myDate;
 
+            },
+            get_timezone:function(tz){
+                console.log(tz);
+                var obj = app.timezone.find(o => o.name === tz)
+
+                return obj.name + " (" + obj.time+")"
             }
         
         
