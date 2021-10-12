@@ -27,6 +27,27 @@
             color: gray;
             font-style: italic;
         }
+
+        .collapsible li.active i {
+
+            transform-origin: center center;
+            -ms-transform: rotate(180deg);
+            /* IE 9 */
+            -webkit-transform: rotate(180deg);
+            /* Chrome, Safari, Opera */
+            transform: rotate(180deg);
+        }
+
+        .rotate {
+            transform-origin: bottom center;
+            -moz-transition: all .3s linear;
+            -webkit-transition: all .3s linear;
+            transition: all .3s linear;
+        }
+
+        .collapsible-header i {
+            margin-left: auto;
+        }
     </style>
 
 </head>
@@ -35,16 +56,12 @@
 
     <div class="container" id="app">
         <div class="row">
-            <h1>SVS Team Application</h1>
+            <h1>SVS Team Sign-Up</h1>
         </div>
         <div class="row">
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-                deserunt mollit anim id est laborum.</p>
-
-
+            <p>Remember, your submitted form will be visible to the rest of the team as a reference for your skills and
+                interests. You can be as detailed or as brief as you like- just note down what you think is helpful to
+                know about you as a member of the team!</p>
 
         </div>
         <hr>
@@ -69,7 +86,6 @@
                         </select>
                         <label>Time Zone</label>
 
-                        <span class="helper-text">Relative to GMT</span>
                     </div>
                 </div>
 
@@ -90,8 +106,9 @@
                                     <span>
 
                                     </span>
-                                </label> Event Coordination&nbsp<span class="summary">{{jobs["ec"].desc}}</span>
+                                </label> Event Coordination -&nbsp<span class="summary">{{jobs["ec"].desc}}</span>
 
+                                <i class="material-icons rotate right">expand_more</i>
 
                             </div>
                             <div class="collapsible-body">
@@ -123,7 +140,9 @@
 
                                     </span>
                                 </label>
-                                Creative and Design&nbsp<span class="summary">{{jobs["cad"].desc}}</span>
+                                Creative and Design -&nbsp<span class="summary">{{jobs["cad"].desc}}</span>
+
+                                <i class="material-icons rotate right">expand_more</i>
                             </div>
                             <div class="collapsible-body">
                                 <ul class="collection">
@@ -147,7 +166,9 @@
 
                                     </span>
                                 </label>
-                                Social Media&nbsp<span class="summary">{{jobs["sm"].desc}}</span>
+                                Social Media -&nbsp<span class="summary">{{jobs["sm"].desc}}</span>
+
+                                <i class="material-icons rotate right">expand_more</i>
                             </div>
                             <div class="collapsible-body">
                                 <ul class="collection">
@@ -175,8 +196,9 @@
                                     <span>
 
                                     </span></label>
-                                Participant Outreach&nbsp<span class="summary">{{jobs["po"].desc}}</span>
+                                Participant Outreach -&nbsp<span class="summary">{{jobs["po"].desc}}</span>
 
+                                <i class="material-icons rotate right">expand_more</i>
                             </div>
                             <div class="collapsible-body">
                                 <ul class="collection">
@@ -203,8 +225,10 @@
 
                                     </span>
                                 </label>
-                                Fundraising and Sponsorship Coordination&nbsp<span
+                                Fundraising and Sponsorship Coordination -&nbsp<span
                                     class="summary">{{jobs["fsc"].desc}}</span>
+
+                                <i class="material-icons rotate right">expand_more</i>
                             </div>
                             <div class="collapsible-body">
                                 <ul class="collection">
@@ -228,7 +252,9 @@
 
                                     </span> </label>
 
-                                Live Stream and Tech&nbsp<span class="summary">{{jobs["lst"].desc}}</span>
+                                Live Stream and Tech -&nbsp<span class="summary">{{jobs["lst"].desc}}</span>
+
+                                <i class="material-icons rotate right">expand_more</i>
                             </div>
                             <div class="collapsible-body">
                                 <ul class="collection">
@@ -249,7 +275,9 @@
 
                                     </span>
                                 </label>
-                                Moderation&nbsp<span class="summary">{{jobs["mod"].desc}}</span>
+                                Moderation -&nbsp<span class="summary">{{jobs["mod"].desc}}</span>
+
+                                <i class="material-icons rotate right">expand_more</i>
                             </div>
                             <div class="collapsible-body">
                                 <ul class="collection">
@@ -268,6 +296,8 @@
 
 
                     <h6>Which role are you most interested in?</h6>
+                    <p>Please mention any particular skills, experience (i.e. with certain software or strategies),
+                        interests or ideas relevant to contributing as part of this team you'd like to share.</p>
                     <p v-for="(aa,ind) in application.roles">
                         <label>
                             <input v-bind:value="jobs[aa].name" v-model="application.fav" name="top" type="radio" />
@@ -276,9 +306,37 @@
                     </p>
                 </div>
 
+
+
+
+
+
+
+
+
+
+
                 <div class="row">
-                    <h5>Skills/Experience </h5>
-                    <p>These may be shared with other teammates as a skills reference only.</p>
+                    <h5>Servers</h5>
+                    <p>(Optional) Are there any servers that you would like be associated with on this form? For
+                        example, if you are particularly active or hold a leadership position within one or multiple
+                        communities.
+                    </p>
+
+                    <span class="helper-text">Press enter after each server.</span>
+                    <div class="chips chips-placeholder">
+
+                    </div>
+                </div>
+
+
+
+                <div class="row">
+                    <h5>Additional Skills/Experience </h5>
+                    <p>(Optional) Is there any additional information you'd like to include on this form? This can
+                        include but isn't limited to any skills or experience you think are relevant to express and
+                        haven't been able to mention yet, or a role you'd like to fill that you don't think is listed.
+                    </p>
                     <ul class="collection">
                         <li v-for="(aa,ind) in application.roles" class="collection-item">
                             <textarea v-model="application.role_experience[ind]" v-bind:id="3+aa"
@@ -293,13 +351,17 @@
                 </div>
 
 
+
+
+
+
                 <div class="row">
                     <div class="col s12">
 
                         <a v-on:click="submitapp"
-                            class="waves-effect btn-large  deep-purple darken-2 waves-light btn">Submit Application</a>
+                            class="waves-effect btn-large  deep-purple darken-2 waves-light btn">Send It!</a>
                         <blockquote>
-                            *If you'd like to reapply just re-submit the form! </blockquote>
+                            *If you'd like to fix anything just re-submit the form! </blockquote>
                     </div>
                 </div>
 
@@ -321,6 +383,23 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
     <script type="module">
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var elems = document.querySelectorAll('.chips');
+            var instances = M.Chips.init(elems, {
+                placeholder: 'Enter Server ',
+                secondaryPlaceholder: '+Server',
+                onChipAdd: function () {
+                    var data = this.chipsData;
+                    var arr = [];
+                    for (var a in data) {
+                        arr.push(data[a].tag);
+                    }
+                    app.application.servers = arr;
+                }
+            });
+        });
+
 
 
         // Your web app's Firebase configuration
@@ -372,8 +451,7 @@
                         obj.roles[o] = app.jobs[obj.roles[o]].name;
                     }
                     obj.timestamp = + new Date();
-                    console.log(obj);
-                    //   db.collection("applications").add(obj);
+                    db.collection("applications").add(obj);
                     M.toast({ html: 'Application Submitted Successfully!', classes: 'rounded' });
                 }
             },
@@ -564,7 +642,8 @@
                     fav: "",
                     roles: [],
                     role_experience: [],
-                    timestamp: ""
+                    timestamp: "",
+                    servers: []
                 }
             }
         }
