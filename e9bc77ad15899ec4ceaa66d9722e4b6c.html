@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SVS Responses</title>
+    <title>SvS Responses</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.js"
         integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
@@ -25,12 +25,45 @@ width: 90% !important;}
 
 .delcell{padding: 30px;}
 
+th[role=columnheader]:not(.no-sort) {
+	cursor: pointer;
+}
+
+th[role=columnheader]:not(.no-sort):after {
+	content: '';
+	border-width: 0 6px 6px;
+	border-style: solid;
+	border-color: #404040 transparent;
+	visibility: hidden;
+	opacity: 0;
+	-ms-user-select: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	user-select: none;
+}
+
+th[aria-sort=ascending]:not(.no-sort):after {
+	border-bottom: none;
+	border-width: 6px 6px 0;
+}
+
+th[aria-sort]:not(.no-sort):after {
+	visibility: visible;
+	opacity: 0.4;
+}
+
+th[role=columnheader]:not(.no-sort):hover:after {
+	visibility: visible;
+	opacity: 1;
+}
+
+.hide{visibility: hidden;}
 </style>
 </head>
 
 <body>
     <div class="container" id="app">
-        <table class="table-sort table-arrows">
+        <table id="sortT" class="table-sort table-arrows">
             <thead>
                 <tr>
                     <th>Timestamp</th>
@@ -48,7 +81,10 @@ width: 90% !important;}
 
             <tbody>
                 <tr v-for="ap in apps">
-                    <td>{{get_date(ap.timestamp)}}</td>
+                    <td>
+                        
+                        <span class="hide">{{ap.timestamp}}</span>
+                        {{get_date(ap.timestamp)}}</td>
                     <td>{{ap.name}}</td>
                     <td>{{ap.discord_tag}}</td>
                     <td>{{get_timezone(ap.time_zone)}} </td>
@@ -294,7 +330,7 @@ width: 90% !important;}
             },
             get_date:function(timestamp){
                 if(!timestamp){return ""}
-                let myDate = new Date(timestamp).toLocaleString()
+                let myDate = new Date(timestamp).toLocaleString('en-GB')
                 return myDate;
 
             },
@@ -334,6 +370,7 @@ width: 90% !important;}
                 app.apps = arr;
             });
 
+            new Tablesort(document.getElementById('sortT'));
         });
     </script>
 </body>
