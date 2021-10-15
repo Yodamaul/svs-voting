@@ -1,373 +1,277 @@
-/* 
-table-sort-js
-Author: Lee Wannacott
-Licence: MIT License Copyright (c) 2021 Lee Wannacott 
-    
-GitHub Repository: https://github.com/LeeWannacott/table-sort-js
-npm package: https://www.npmjs.com/package/table-sort-js
-Demo: https://leewannacott.github.io/Portfolio/#/GitHub
-Install:
-Frontend: <script src="https://leewannacott.github.io/table-sort-js/table-sort.js"></script> or
-Download this file and add <script src="table-sort.js"></script> to your HTML 
-Backend: npm install table-sort-js and use require("../node_modules/table-sort-js/table-sort.js") 
-Instructions:
-  Add class="table-sort" to tables you'd like to make sortable
-  Click on the table headers to sort them.
-*/
+;(function() {
+  function Tablesort(el, options) {
+    if (!(this instanceof Tablesort)) return new Tablesort(el, options);
 
-function tableSortJs(test = false, domDocumentWindow = document) {
-  function checkIfTesting() {
-    if (test === true) {
-      const getTagTable = domDocumentWindow.getElementsByTagName("table");
-      const createTableHead = domDocumentWindow.createElement("thead");
-      return [getTagTable, createTableHead];
+    if (!el || el.tagName !== 'TABLE') {
+      throw new Error('Element must be a table');
+    }
+    this.init(el, options || {});
+  }
+
+  var sortOptions = [];
+
+  var createEvent = function(name) {
+    var evt;
+
+    if (!window.CustomEvent || typeof window.CustomEvent !== 'function') {
+      evt = document.createEvent('CustomEvent');
+      evt.initCustomEvent(name, false, false, undefined);
     } else {
-      const getTagTable = document.getElementsByTagName("table");
-      const createTableHead = document.createElement("thead");
-      return [getTagTable, createTableHead];
+      evt = new CustomEvent(name);
     }
+
+    return evt;
+  };
+
+  var getInnerText = function(el) {
+    return el.getAttribute('data-sort') || el.textContent || el.innerText || '';
+  };
+
+  // Default sort method if no better sort method is found
+  var caseInsensitiveSort = function(a, b) {
+    a = a.trim().toLowerCase();
+    b = b.trim().toLowerCase();
+
+    if (a === b) return 0;
+    if (a < b) return 1;
+
+    return -1;
+  };
+
+  var getCellByKey = function(cells, key) {
+    return [].slice.call(cells).find(function(cell) {
+      return cell.getAttribute('data-sort-column-key') === key;
+    });
+  };
+
+  // Stable sort function
+  // If two elements are equal under the original sort function,
+  // then there relative order is reversed
+  var stabilize = function(sort, antiStabilize) {
+    return function(a, b) {
+      var unstableResult = sort(a.td, b.td);
+
+      if (unstableResult === 0) {
+        if (antiStabilize) return b.index - a.index;
+        return a.index - b.index;
+      }
+
+      return unstableResult;
+    };
+  };
+
+  Tablesort.extend = function(name, pattern, sort) {
+    if (typeof pattern !== 'function' || typeof sort !== 'function') {
+      throw new Error('Pattern and sort must be a function');
+    }
+
+    sortOptions.push({
+      name: name,
+      pattern: pattern,
+      sort: sort
+    });
+  };
+
+  Tablesort.prototype = {
+
+    init: function(el, options) {
+      var that = this,
+          firstRow,
+          defaultSort,
+          i,
+          cell;
+
+      that.table = el;
+      that.thead = false;
+      that.options = options;
+
+      if (el.rows && el.rows.length > 0) {
+        if (el.tHead && el.tHead.rows.length > 0) {
+          for (i = 0; i < el.tHead.rows.length; i++) {
+            if (el.tHead.rows[i].getAttribute('data-sort-method') === 'thead') {
+              firstRow = el.tHead.rows[i];
+              break;
+            }
+          }
+          if (!firstRow) {
+            firstRow = el.tHead.rows[el.tHead.rows.length - 1];
+          }
+          that.thead = true;
+        } else {
+          firstRow = el.rows[0];
+        }
+      }
+
+      if (!firstRow) return;
+
+      var onClick = function() {
+        if (that.current && that.current !== this) {
+          that.current.removeAttribute('aria-sort');
+        }
+
+        that.current = this;
+        that.sortTable(this);
+      };
+
+      // Assume first row is the header and attach a click handler to each.
+      for (i = 0; i < firstRow.cells.length; i++) {
+        cell = firstRow.cells[i];
+        cell.setAttribute('role','columnheader');
+        if (cell.getAttribute('data-sort-method') !== 'none') {
+          cell.tabindex = 0;
+          cell.addEventListener('click', onClick, false);
+
+          if (cell.getAttribute('data-sort-default') !== null) {
+            defaultSort = cell;
+          }
+        }
+      }
+
+      if (defaultSort) {
+        that.current = defaultSort;
+        that.sortTable(defaultSort);
+      }
+    },
+
+    sortTable: function(header, update) {
+      var that = this,
+          columnKey = header.getAttribute('data-sort-column-key'),
+          column = header.cellIndex,
+          sortFunction = caseInsensitiveSort,
+          item = '',
+          items = [],
+          i = that.thead ? 0 : 1,
+          sortMethod = header.getAttribute('data-sort-method'),
+          sortOrder = header.getAttribute('aria-sort');
+
+      that.table.dispatchEvent(createEvent('beforeSort'));
+
+      // If updating an existing sort, direction should remain unchanged.
+      if (!update) {
+        if (sortOrder === 'ascending') {
+          sortOrder = 'descending';
+        } else if (sortOrder === 'descending') {
+          sortOrder = 'ascending';
+        } else {
+          sortOrder = that.options.descending ? 'descending' : 'ascending';
+        }
+
+        header.setAttribute('aria-sort', sortOrder);
+      }
+
+      if (that.table.rows.length < 2) return;
+
+      // If we force a sort method, it is not necessary to check rows
+      if (!sortMethod) {
+        var cell;
+        while (items.length < 3 && i < that.table.tBodies[0].rows.length) {
+          if(columnKey) {
+            cell = getCellByKey(that.table.tBodies[0].rows[i].cells, columnKey);
+          } else {
+            cell = that.table.tBodies[0].rows[i].cells[column];
+          }
+
+          // Treat missing cells as empty cells
+          item = cell ? getInnerText(cell) : "";
+
+          item = item.trim();
+
+          if (item.length > 0) {
+            items.push(item);
+          }
+
+          i++;
+        }
+
+        if (!items) return;
+      }
+
+      for (i = 0; i < sortOptions.length; i++) {
+        item = sortOptions[i];
+
+        if (sortMethod) {
+          if (item.name === sortMethod) {
+            sortFunction = item.sort;
+            break;
+          }
+        } else if (items.every(item.pattern)) {
+          sortFunction = item.sort;
+          break;
+        }
+      }
+
+      that.col = column;
+
+      for (i = 0; i < that.table.tBodies.length; i++) {
+        var newRows = [],
+            noSorts = {},
+            j,
+            totalRows = 0,
+            noSortsSoFar = 0;
+
+        if (that.table.tBodies[i].rows.length < 2) continue;
+
+        for (j = 0; j < that.table.tBodies[i].rows.length; j++) {
+          var cell;
+
+          item = that.table.tBodies[i].rows[j];
+          if (item.getAttribute('data-sort-method') === 'none') {
+            // keep no-sorts in separate list to be able to insert
+            // them back at their original position later
+            noSorts[totalRows] = item;
+          } else {
+            if (columnKey) {
+              cell = getCellByKey(item.cells, columnKey);
+            } else {
+              cell = item.cells[that.col];
+            }
+            // Save the index for stable sorting
+            newRows.push({
+              tr: item,
+              td: cell ? getInnerText(cell) : '',
+              index: totalRows
+            });
+          }
+          totalRows++;
+        }
+        // Before we append should we reverse the new array or not?
+        // If we reverse, the sort needs to be `anti-stable` so that
+        // the double negatives cancel out
+        if (sortOrder === 'descending') {
+          newRows.sort(stabilize(sortFunction, true));
+        } else {
+          newRows.sort(stabilize(sortFunction, false));
+          newRows.reverse();
+        }
+
+        // append rows that already exist rather than creating new ones
+        for (j = 0; j < totalRows; j++) {
+          if (noSorts[j]) {
+            // We have a no-sort row for this position, insert it here.
+            item = noSorts[j];
+            noSortsSoFar++;
+          } else {
+            item = newRows[j - noSortsSoFar].tr;
+          }
+
+          // appendChild(x) moves x if already present somewhere else in the DOM
+          that.table.tBodies[i].appendChild(item);
+        }
+      }
+
+      that.table.dispatchEvent(createEvent('afterSort'));
+    },
+
+    refresh: function() {
+      if (this.current !== undefined) {
+        this.sortTable(this.current, true);
+      }
+    }
+  };
+
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = Tablesort;
+  } else {
+    window.Tablesort = Tablesort;
   }
-  const [getTagTable, createTableHead] = checkIfTesting();
-  const columnIndexAndTableRow = {};
-  const fileSizeColumnTextAndRow = {};
-  for (let table of getTagTable) {
-    if (table.classList.contains("table-sort")) {
-      makeTableSortable(table);
-    }
-  }
-
-  function makeTableSortable(sortableTable) {
-    if (sortableTable.getElementsByTagName("thead").length === 0) {
-      createTableHead;
-      the.appendChild(sortableTable.rows[0]);
-      sortableTable.insertBefore(the, sortableTable.firstChild);
-    }
-
-    const tableHead = sortableTable.querySelector("thead");
-    const tableBody = sortableTable.querySelector("tbody");
-    const tableHeadHeaders = tableHead.querySelectorAll("th");
-    tableHead.style.cursor = "pointer";
-
-    let columnIndexesClicked = [];
-    for (let [columnIndex, th] of tableHeadHeaders.entries()) {
-      let timesClickedColumn = 0;
-
-      th.addEventListener("click", function () {
-        const tableRows = tableBody.querySelectorAll("tr");
-        const columnData = [];
-
-        let isDataAttribute = th.classList.contains("data-sort");
-        if(isDataAttribute){
-          for (let [i, tr] of tableRows.entries()) {
-            const dataAttributeTd = tr.querySelectorAll("td").item(columnIndex).dataset.sort
-            columnData.push(`${dataAttributeTd}#${i}`)
-            columnIndexAndTableRow[columnData[i]] = tr.innerHTML;
-          }
-        }
-
-        let isDayOfWeek = th.classList.contains("days-of-week");
-        if (isDayOfWeek) {
-          const day = /(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday|Mon|Tue|Wed|Thur|Fri|Sat|Sun)/i;
-          const dayOfWeek = {
-            Monday: 1,
-            Tuesday: 2,
-            Wednesday: 3,
-            Thursday: 4,
-            Friday: 5,
-            Saturday: 6,
-            Sunday: 7,
-          };
-          for (let [i, tr] of tableRows.entries()) {
-            const dayOfWeekTd = tr.querySelectorAll("td").item(columnIndex)
-              .textContent;
-            if (dayOfWeekTd.match(day)) {
-              if (dayOfWeekTd.match(/Monday|Mon/i)) {
-                columnData.push(`${dayOfWeek.Monday}#${i}`);
-              } else if (dayOfWeekTd.match(/Tuesday|Tue/i)) {
-                columnData.push(`${dayOfWeek.Tuesday}#${i}`);
-              } else if (dayOfWeekTd.match(/Wednesday|Wed/i)) {
-                columnData.push(`${dayOfWeek.Wednesday}#${i}`);
-              } else if (dayOfWeekTd.match(/Thursday|Thur/i)) {
-                columnData.push(`${dayOfWeek.Thursday}#${i}`);
-              } else if (dayOfWeekTd.match(/Friday|Fri/i)) {
-                columnData.push(`${dayOfWeek.Friday}#${i}`);
-              } else if (dayOfWeekTd.match(/Saturday|Sat/i)) {
-                columnData.push(`${dayOfWeek.Saturday}#${i}`);
-              } else if (dayOfWeekTd.match(/Sunday|Sun/i)) {
-                columnData.push(`${dayOfWeek.Sunday}#${i}`);
-              }
-            } else {
-              columnData.push(`!X!Y!Z!#${i}`);
-            }
-          }
-        }
-
-        // Handle filesize sorting (e.g KB, MB, GB, TB) - Turns data into KiB.
-        let isFileSize = th.classList.contains("file-size");
-        if (isFileSize) {
-          const numberWithUnitType = /[.0-9]+(\s?B|\s?KB|\s?KiB|\s?MB|\s?MiB|\s?GB|\s?GiB|T\s?B|\s?TiB)/i;
-          const unitType = /(\s?B|\s?KB|\s?KiB|\s?MB|\s?MiB|\s?GB|G\s?iB|\s?TB|\s?TiB)/i;
-          const fileSizes = {
-            Kibibyte: 1024,
-            Mebibyte: 1.049e6,
-            Gibibyte: 1.074e9,
-            Tebibyte: 1.1e12,
-            Pebibyte: 1.126e15,
-            Kilobyte: 1000,
-            Megabyte: 1e6,
-            Gigabyte: 1e9,
-            Terabyte: 1e12,
-          };
-
-          function removeUnitTypeConvertToBytes(fileSizeTd, _replace) {
-            fileSizeTd = fileSizeTd.replace(unitType, "");
-            fileSizeTd = fileSizeTd.replace(
-              fileSizeTd,
-              fileSizeTd * fileSizes[_replace]
-            );
-            return fileSizeTd;
-          }
-
-          for (let [i, tr] of tableRows.entries()) {
-            let fileSizeTd = tr.querySelectorAll("td").item(columnIndex)
-              .textContent;
-            if (fileSizeTd.match(numberWithUnitType)) {
-              if (fileSizeTd.match(/\s?KB/i)) {
-                fileSizeTd = removeUnitTypeConvertToBytes(fileSizeTd, 'Kilobyte')
-                columnData.push(`${fileSizeTd}#${i}`);
-              } else if (fileSizeTd.match(/\s?KiB/i)) {
-                fileSizeTd = removeUnitTypeConvertToBytes(fileSizeTd, 'Kibibyte')
-                columnData.push(`${fileSizeTd}#${i}`);
-              } else if (fileSizeTd.match(/\s?MB/i)) {
-                fileSizeTd = removeUnitTypeConvertToBytes(fileSizeTd, 'Megabyte')
-                columnData.push(`${fileSizeTd}#${i}`);
-              } else if (fileSizeTd.match(/\s?MiB/i)) {
-                fileSizeTd = removeUnitTypeConvertToBytes(fileSizeTd, 'Mebibyte')
-                columnData.push(`${fileSizeTd}#${i}`);
-              } else if (fileSizeTd.match(/\s?GB/i)) {
-                fileSizeTd = removeUnitTypeConvertToBytes(fileSizeTd, 'Gigabyte')
-                columnData.push(`${fileSizeTd}#${i}`);
-              } else if (fileSizeTd.match(/\s?GiB/i)) {
-                fileSizeTd = removeUnitTypeConvertToBytes(fileSizeTd, 'Gibibyte')
-                columnData.push(`${fileSizeTd}#${i}`);
-              } else if (fileSizeTd.match(/\s?TB/i)) {
-                fileSizeTd = removeUnitTypeConvertToBytes(fileSizeTd, 'Terabyte')
-                columnData.push(`${fileSizeTd}#${i}`);
-              } else if (fileSizeTd.match(/\s?TiB/i)) {
-                fileSizeTd = removeUnitTypeConvertToBytes(fileSizeTd, 'Tebibyte')
-                columnData.push(`${fileSizeTd}#${i}`);
-              } else if (fileSizeTd.match(/\s?B/i)) {
-                fileSizeTd = fileSizeTd.replace(unitType, "");
-                columnData.push(`${fileSizeTd}#${i}`);
-              }
-            } else {
-              columnData.push(`!X!Y!Z!#${i}`);
-            }
-          }
-        }
-
-        let isRememberSort = sortableTable.classList.contains("remember-sort");
-        // Checking if user has clicked different column from the first column if yes reset times clicked.
-        if (!isRememberSort) {
-          columnIndexesClicked.push(columnIndex);
-          if (timesClickedColumn === 1 && columnIndexesClicked.length > 1) {
-            const lastColumnClicked =
-              columnIndexesClicked[columnIndexesClicked.length - 1];
-            const secondLastColumnClicked =
-              columnIndexesClicked[columnIndexesClicked.length - 2];
-            if (lastColumnClicked !== secondLastColumnClicked) {
-              timesClickedColumn = 0;
-              columnIndexesClicked.shift();
-            }
-          }
-        }
-
-        timesClickedColumn += 1;
-
-        getTableData();
-        updateTable();
-
-        function updateTable() {
-          for (let [i, tr] of tableRows.entries()) {
-            if (isFileSize) {
-              tr.innerHTML = fileSizeColumnTextAndRow[columnData[i]];
-              let fileSizeInBytesHTML = tr
-                .querySelectorAll("td")
-                .item(columnIndex).innerHTML;
-              let fileSizeInBytesText = tr
-                .querySelectorAll("td")
-                .item(columnIndex).textContent;
-              const fileSizes = {
-                Kibibyte: 1024,
-                Mebibyte: 1.049e6,
-                Gibibyte: 1.074e9,
-                Tebibyte: 1.1e12,
-                Pebibyte: 1.126e15,
-              };
-              // Remove the unique identifyer for duplicate values(#number).
-              columnData[i] = columnData[i].replace(/#[0-9]*/, "");
-              if (columnData[i] < fileSizes.Kibibyte) {
-                fileSizeInBytesHTML = fileSizeInBytesHTML.replace(
-                  fileSizeInBytesText,
-                  `${parseFloat(columnData[i]).toFixed(2)} B`
-                );
-              } else if (
-                columnData[i] >= fileSizes.Kibibyte &&
-                columnData[i] < fileSizes.Mebibyte
-              ) {
-                fileSizeInBytesHTML = fileSizeInBytesHTML.replace(
-                  fileSizeInBytesText,
-                  `${(columnData[i] / fileSizes.Kibibyte).toFixed(2)} KiB`
-                );
-              } else if (
-                columnData[i] >= fileSizes.Mebibyte &&
-                columnData[i] < fileSizes.Gibibyte
-              ) {
-                fileSizeInBytesHTML = fileSizeInBytesHTML.replace(
-                  fileSizeInBytesText,
-                  `${(columnData[i] / fileSizes.Mebibyte).toFixed(2)} MiB`
-                );
-              } else if (
-                columnData[i] >= fileSizes.Gibibyte &&
-                columnData[i] < fileSizes.Tebibyte
-              ) {
-                fileSizeInBytesHTML = fileSizeInBytesHTML.replace(
-                  fileSizeInBytesText,
-                  `${(columnData[i] / fileSizes.Gibibyte).toFixed(2)} GiB`
-                );
-              } else if (
-                columnData[i] >= fileSizes.Tebibyte &&
-                columnData[i] < fileSizes.Pebibyte
-              ) {
-                fileSizeInBytesHTML = fileSizeInBytesHTML.replace(
-                  fileSizeInBytesText,
-                  `${(columnData[i] / fileSizes.Tebibyte).toFixed(2)} TiB`
-                );
-              } else {
-                fileSizeInBytesHTML = fileSizeInBytesHTML.replace(
-                  fileSizeInBytesText,
-                  "NaN"
-                );
-              }
-              tr
-                .querySelectorAll("td")
-                .item(columnIndex).innerHTML = fileSizeInBytesHTML;
-            } else if (!isFileSize) {
-              tr.innerHTML = columnIndexAndTableRow[columnData[i]];
-            }
-          }
-        }
-
-        function getTableData() {
-          for (let [i, tr] of tableRows.entries()) {
-            // inner text for column we click on
-            let tdTextContent = tr.querySelectorAll("td").item(columnIndex)
-              .textContent;
-            if (tdTextContent.length === 0) {
-              tdTextContent = "";
-            }
-            if (tdTextContent.trim() !== "") {
-              if (isFileSize) {
-                fileSizeColumnTextAndRow[columnData[i]] = tr.innerHTML;
-              }
-              if (isDayOfWeek) {
-                columnIndexAndTableRow[columnData[i]] = tr.innerHTML;
-              }
-              if (!isFileSize && !isDayOfWeek && !isDataAttribute) {
-                columnData.push(`${tdTextContent}#${i}`);
-                columnIndexAndTableRow[`${tdTextContent}#${i}`] = tr.innerHTML;
-              }
-            } else {
-              // Fill in blank table cells dict key with filler value.
-              columnData.push(`!X!Y!Z!#${i}`);
-              columnIndexAndTableRow[`!X!Y!Z!#${i}`] = tr.innerHTML;
-            }
-          }
-
-          function naturalSortAescending(a, b) {
-            if (a.includes("X!Y!Z!#")) {
-              return 1;
-            } else if (b.includes("X!Y!Z!#")) {
-              return -1;
-            } else {
-              return a.localeCompare(
-                b,
-                navigator.languages[0] || navigator.language,
-                { numeric: true, ignorePunctuation: true }
-              );
-            }
-          }
-
-          function naturalSortDescending(a, b) {
-            return naturalSortAescending(b, a);
-          }
-
-          function clearArrows(arrowUp = "▲", arrowDown = "▼") {
-            th.innerText = th.innerText.replace(arrowUp, "");
-            th.innerText = th.innerText.replace(arrowDown, "");
-          }
-
-          let arrowUp = " ▲";
-          let arrowDown = " ▼";
-
-          // Sort naturally; default aescending unless th contains 'order-by-desc' as className.
-          if (columnData[0] === undefined) {
-            return;
-          }
-
-          let desc = th.classList.contains("order-by-desc");
-          let tableArrows = sortableTable.classList.contains("table-arrows");
-
-          if (timesClickedColumn === 1) {
-            if (desc) {
-              if (tableArrows) {
-                clearArrows(arrowUp, arrowDown);
-                th.insertAdjacentText("beforeend", arrowDown);
-              }
-              columnData.sort(naturalSortDescending, {
-                numeric: true,
-                ignorePunctuation: true,
-              });
-            } else {
-              if (tableArrows) {
-                clearArrows(arrowUp, arrowDown);
-                th.insertAdjacentText("beforeend", arrowUp);
-              }
-              columnData.sort(naturalSortAescending);
-            }
-          } else if (timesClickedColumn === 2) {
-            timesClickedColumn = 0;
-            if (desc) {
-              if (tableArrows) {
-                clearArrows(arrowUp, arrowDown);
-                th.insertAdjacentText("beforeend", arrowUp);
-              }
-              columnData.sort(naturalSortAescending, {
-                numeric: true,
-                ignorePunctuation: true,
-              });
-            } else {
-              if (tableArrows) {
-                clearArrows(arrowUp, arrowDown);
-                th.insertAdjacentText("beforeend", arrowDown);
-              }
-              columnData.sort(naturalSortDescending);
-            }
-          }
-        }
-      });
-    }
-  }
-}
-
-if (
-  document.readyState === "complete" ||
-  document.readyState === "interactive"
-) {
-  tableSortJs();
-} else if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", tableSortJs, false);
-}
-if (typeof module == "object") {
-  module.exports = tableSortJs;
-}
+})();
