@@ -78,9 +78,14 @@
             <form class="col s12">
                 <div class="row">
                     <div class="input-field col s6">
-                        <input v-model="application.name" placeholder="Preferred Name" id="first_name" type="text"
+                        <input v-model="application.name" placeholder="Placeholder" id="first_name" type="text"
                             class="validate">
                         <label for="first_name">Name</label>
+                    </div>
+                    <div class="input-field col s6">
+                        <input v-model="application.pronouns" placeholder="Placeholder" id="first_name" type="text"
+                            class="validate">
+                        <label for="first_name">Preferred Pronouns</label>
                     </div>
                     <div class="input-field col s6">
                         <input v-model="application.discord_tag" id="last_name" type="text" class="validate">
@@ -281,7 +286,7 @@
                             </div>
                             <div class="collapsible-body">
                                 <ul class="collection">
-                                    <li class="collection-item"> Keeping things clean on the server and the stream.</li>
+                                    <li class="collection-item"> Keeping things clean on the server and the stream</li>
 
                                     <li class="collection-item">Moderates both the SvS Discord server and live Twitch
                                         chat, upholding both platform specific rules and our overall Code of Conduct.
@@ -301,7 +306,7 @@
                             </div>
                             <div class="collapsible-body">
                                 <p>Here's some examples of cross-team projects that will require coordination between
-                                    multiple teams:</p>
+                                    multiple teams</p>
                                 <ul class="collection">
                                     <li class="collection-item"> Establishing a formalised code of conduct for SvS as a
                                         whole- both staff and participants, worked on across all teams and across the
@@ -376,7 +381,7 @@
 
                     <div class="input-field col s12">
                         <textarea v-model="application.desc" id="textarea1" class="materialize-textarea"></textarea>
-                        <label for="textarea1">Mention any experience and skills not listed above</label>
+                        <label for="textarea1">List any experience and skills not listed above</label>
                     </div>
                 </div>
 
@@ -417,7 +422,7 @@
         document.addEventListener('DOMContentLoaded', function () {
             var elems = document.querySelectorAll('.chips');
             var instances = M.Chips.init(elems, {
-                placeholder: 'List server(s)',
+                placeholder: 'Enter Server ',
                 secondaryPlaceholder: '+Server',
                 onChipAdd: function () {
                     var data = this.chipsData;
@@ -673,6 +678,7 @@
                     roles: [],
                     role_experience: [],
                     timestamp: "",
+                    pronouns:"",
                     servers: []
                 }
             }
