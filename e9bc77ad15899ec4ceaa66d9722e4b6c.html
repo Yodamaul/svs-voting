@@ -68,6 +68,7 @@ th[role=columnheader]:not(.no-sort):hover:after {
                 <tr>
                     <th>Timestamp</th>
                     <th>Name</th>
+                    <th>Pronouns</th>
                     <th>Discord Tag</th>
                     <th>Time Zone</th>
                     <th>Job</th>
@@ -86,6 +87,7 @@ th[role=columnheader]:not(.no-sort):hover:after {
                         <span class="hide">{{ap.timestamp}}</span>
                         {{get_date(ap.timestamp)}}</td>
                     <td>{{ap.name}}</td>
+                    <td><span v-if="ap.pronouns">{{ap.pronouns}}</span></td>
                     <td>{{ap.discord_tag}}</td>
                     <td>{{get_timezone(ap.time_zone)}} </td>
                     <td>
